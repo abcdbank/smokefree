@@ -126,4 +126,13 @@ public class AxonFactory {
                 .dispatchInterceptors(newArrayList(new BeanValidationInterceptor<>()))
                 .build();
     }
+
+    @Singleton
+    public CommandGateway commandGatewaySimple1(CommandBus commandBus) {
+        return DefaultCommandGateway
+                .builder()
+                .commandBus(commandBus)
+                .dispatchInterceptors(newArrayList(new BeanValidationInterceptor<>()))
+                .build();
+    }
 }

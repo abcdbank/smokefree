@@ -25,7 +25,7 @@ import javax.inject.Inject;
 public class Application {
 
     // Store the application context so classes can use programmatic dependency injection
-    // Hi there - Injecting ApplicationContext programatically
+    // Hi there - Injecting ApplicationContext programatically - Hi there resolved
     private static ApplicationContext applicationContext = null;
     public static ApplicationContext getApplicationContext() {
         return applicationContext;
