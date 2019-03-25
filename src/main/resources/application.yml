@@ -1,0 +1,5 @@
+micronaut:
+#  security:
+#    token:
+#      propagation:
+#        enabled: true

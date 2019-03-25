@@ -1,0 +1,36 @@
+sudo: required
+language: java
+services:
+- docker
+jdk: openjdk11
+cache:
+  directories:
+  - "$HOME/.m2"
+env:
+  global:
+  - COMMIT=${TRAVIS_COMMIT::7}
+  - secure: XDZbUi+R//Uq1EUNlW1mrNnHzki3W6gM2qAzD/SpIjot9XrcecqhZKgH0HUuBuNg33keQdbG/SzvYjGj/TrZvyablMcVx1U2SwLBHLDZelOTW/8ECkG3dDzd0sKmXbpPUntzpRJEQgx3nc9lvc/7U904r9+ETBuut4EHZ+eFw991FpoUQJJvN//rn6FmLLXgUuFMGKq92WlbSjrL30gEsKbBJw72wFqmoj2+39Lx4OuKl7WJkDpxWJr+SWbBQJgzOQW2Q2d01CygUyzNyqoss00/Nrp0VoCzm6aMuFYwIXD7o5nwgxDN4ts9iFy9UeAvm2xPX+/6hr0aKqt76xuqujK+V14cCiwQBYl7bKjedscH/4k26W4ZpXxELEPhwLHJJW7udEj49Ceeh+acBZhnc20YR2zIYHdCRuJrlUcKVJvxvKuduEpCbyZM6kS2ur1SP6jjNWg/zBRy+i8RSNy55KsxpF57oPCUAHO55qe+pngVKLEXAwIbI7kNq1/bdJgieXTplAuwqRmbRmmMWz4mR5XTaB/q46bT9Tz8vUiTOxFtgxjd1s5kOozc3Co5CGNxPYUB64UFRe1/R4lz1Uq83Tz0aH6+AYDzjxjTIqUYSHoUl04/aaeDwvddsAHiqQSe3O58Mx1oPTodF6IWqmA9z2zTD+jYy5Vy0ZpyLkgZg5s=
+  - secure: LA5RL6LDPM3+1E0H2ZK+xgNg1QrhXcOnA3zS8ydR2wrPMa5er0lvoRWgA05VJxIxC6aPconPJyDVKlQotk2kKXjRHT0486D/r1PiWLbqLDVDYutJZGIgZdxY36ACrAHWkcmAlQy7v8Bgzf7ORiT3yY8ydPWTraRxMIVHefLixoZb9GA9HZv43b7B8K2XhB/Hn7rzhDlBDnYoH0+Gjzg8WaTy50PHHJikeikDnLaAxfTtXNAxJn+Z3+wDVGav9Zt9WRgcFCcwalU9YkdB1pgUczqHpDvJ6Os/Kmr52LD6jmQysqkEJx3Yi9UIj9HhXFcj2Q9PLVr/E5oXIIIxT+oKOT2aN/KSvrrEMrSXU45ti0YdG/icx7ibGjJxzhxcRYKTXiyg6U3ae6Frw7U/uvut0aVko2cR50s53Ws8zKoXMG3CuT/4Ujsaaea/OcZ5oUz0oxR0S3Z6B80AFumxLsWxN2MgOil1nzt/wcakBEFdta0M8muz9oo5343UN0EELPYRMIjcGzBd507ws2YirCKO37bCqqjZggVbbSzpz3LqHfxRFSK07VlJo91nuDuVd9QLY2MEkTboNG1sGrY+/5D5OYsYhPKWGJ48aNpiToRpa+oeCtNtjOBVCDLd6880y9C0AG8BPC2yA3P3WAsqThwYFQETq9azQVmbkKp+yyBs8ww=
+  - secure: lBcac1n5op9siA2tX1UnpGTcu/8NW22UULG6Ax1HBSklrbEVTrcLvsLYfLeNLrDkiN7lQc4yZNiKV+mCTXzbWOohwd/25o4m3yqzYpxDDDJgby/A/hDHlk5qXq2TqUXv6d1axam6RzY+2BnDNEMRx33T5gnv45Mz+2rvtPO8zYi14PSPzey0JWW4YWP707ZrRSg/1FA8Szt+M0kN7wOciDIyUxS4rkTQWMNTTKl+iwHKVXP39aLL+32VIFNDwB1m0ES+FyAkN/FZIp5qT82V5qy9upGt2L+ovL1IUIMDFNUBWUg8DXtGJMaRMJGsckDBb4c/ByNEF8taNIxwZoyNwezxxQF8S+mdc5Du2TyfB4QMa7ph9i7PXY2FRhzIxTHO0l1hpC1bQl9iJiRIHQRThpH+jRjsgvqJAwGoXaS/Z9/s9P5mR7AbOhnvk5t8Eti5RaMDe/rpS2ZfuNJDA1z7sAY4v9LBWqhVdKaL02BbQ50ls27RPv+QyVIQH1sp36u2WLcOSRFcgOdQOBxEsq8UqtfscIgnRjbt387v/WhB6Gt3pLekzEcD2cFhEEafB7h1yfjeVOA+ZFbtUHqenBqCMqmxbggbmBlGoCR76cjbdTZgzjQVNsT2+s97rzGeCohqEnkY9eJUZos0lfALU9aOF3WlMEAzUrU6mkhgEL9rzZw=
+jobs:
+  include:
+  - stage: test
+    script: mvn test
+    after_success:
+    - bash <(curl -s https://codecov.io/bash)
+  - stage: production build
+    script:
+    - docker login -u $DOCKER_USER -p $DOCKER_PASS
+    - export REPO=localmotion/smokefree-initiative-service
+    - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo
+      $TRAVIS_BRANCH | sed 's/\//_/g' ; fi`
+    - docker build -f Dockerfile -t $REPO:$COMMIT .
+    - docker tag $REPO:$COMMIT $REPO:$TAG
+    - docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
+    - docker push $REPO
+notifications:
+  slack:
+    rooms:
+      secure: XVE83a8kms/EyJoQLxf2hbj/4EsHmLXMnUgNnbEhP4pwqmUGJtmA75sSC/2CxFUb0Iel29QmxywbywuKKhYRlG5VYppdipAz6hwfAQLIcxuBAOxNOxG4eEPbqdUtvWtlZ8yDymgBywX5slnkhHCwagS3E05R+aNfCQ6DprL1SlVtwnlZQME8cKlSGVXVxfpQ1l3gFTavoU68iwIdq8LwLGUai/zeDo1WzEhP/OhV77HRCkTMRyigAhD/Bz3+E1hlU6lH0y1Bkqn2zo8Udize/JBRJMZYRkAvwCpgDZNMgTr+9SVSsDPyHOdTbDz3mQGwkZDFsG702DUEyHLr/xV7v0B2TDqKBfD5hCsdOg84wE3cHqqZwQwMsF+vZNXp8YzzkW1ikSVvo+qGYFUlqvFYzz9dRG7QStA4D+dS+YQRF89qmqadEOlZs7QbmIPr8bt8lHLlgUvunYqlgOWcbKb1n0IC2vYjiiFj3eunxOoo39/C5yY6+60yT4BYSE2pFamvRyKl+BFLhlIxZ2zyHhNxUBDqfTNz7VO2JHtCxaF2xOlhdCX1nfLF2t+OOy3N782lCjOwXka8j7OeU7Am7oC6cAQmUduhEbynyd/j9J6DIPrGsegKBvPMW/iBu0sq56GpPchDXXNbCPXmnFV947F6944MTXnc2FnheGcRlcoVUVc=
+    on_success: always
+    on_failure: always

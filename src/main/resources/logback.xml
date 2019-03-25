@@ -1,0 +1,26 @@
+<configuration>
+    <conversionRule conversionWord="crlf" converterClass="org.owasp.security.logging.mask.CRLFConverter"/>
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %crlf(%msg) %n</pattern>
+        </encoder>
+    </appender>
+    <logger name="smokefree" level="trace" additivity="false">
+        <appender-ref ref="stdout" />
+    </logger>
+    <logger name="smokefree.aws.rds.secretmanager.RDSSecretManager" level="info" additivity="false">
+        <appender-ref ref="stdout" />
+    </logger>
+    <logger name="org.axonframework" level="info" additivity="false">
+        <appender-ref ref="stdout" />
+    </logger>
+    <logger name="io.micronaut" level="info" additivity="false">
+        <appender-ref ref="stdout" />
+    </logger>
+    <logger name="graphql" level="info" additivity="false">
+        <appender-ref ref="stdout" />
+    </logger>
+    <root level="info">
+        <appender-ref ref="stdout" />
+    </root>
+</configuration>
