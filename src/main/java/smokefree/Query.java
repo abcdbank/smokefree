@@ -56,6 +56,7 @@ public class Query implements GraphQLQueryResolver {
     }
 
 
+
     /***********
      * Utility functions
      ************/
