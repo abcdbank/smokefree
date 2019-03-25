@@ -25,7 +25,7 @@ import javax.inject.Inject;
 public class Application {
 
     // Store the application context so classes can use programmatic dependency injection
-    // Hi there
+    // Hi there - Injecting ApplicationContext programatically
     private static ApplicationContext applicationContext = null;
     public static ApplicationContext getApplicationContext() {
         return applicationContext;
@@ -53,7 +53,7 @@ public class Application {
     }
 
     /*
-    * sdmfndsfnndslfn
+    * duplicate bean creation
      */
 
     /*@Bean

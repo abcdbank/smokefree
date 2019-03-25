@@ -119,7 +119,7 @@ public class AxonFactory {
     }
 
     @Singleton
-    public CommandGateway commandGatewayasdsad(CommandBus commandBus) {
+    public CommandGateway commandGatewaySimple(CommandBus commandBus) {
         return DefaultCommandGateway
                 .builder()
                 .commandBus(commandBus)

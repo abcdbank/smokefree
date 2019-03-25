@@ -55,13 +55,6 @@ public class Query implements GraphQLQueryResolver {
                 .count();
     }
 
-    public long totalVolunteers1() {
-        return initiatives.playgrounds(null).stream()
-                .flatMap(playground -> playground.getVolunteers().stream())
-                .distinct()
-                .count();
-    }
-
 
     /***********
      * Utility functions
